@@ -8,3 +8,5 @@ Ce script Bash simplifie la création d'une classe (canonique) C++ en générant
 ```
 (DELETE est optionnel et sert à supprimer les fichiers crées par le script).
 
+
+Dédicace à tbourdea pour l'idée 😉💯
