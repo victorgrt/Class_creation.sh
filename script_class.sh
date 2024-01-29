@@ -66,24 +66,43 @@ fi
 echo -e "$BOLD\nScript en cours d'exécution...$RESET"
 pourcentage=0
 
-# Créer le fichier Makefile
-afficher_etape_script "Création du fichier Makefile" "$BLUE"
-sleep 0.5
-echo -e "NAME = $projet\n\nCXX = c++\nCXXFLAGS = -Wall -Wextra -Werror -std=c++98\n\nSRCS = main.cpp $projet.cpp\nOBJS = \$(SRCS:.cpp=.o)\n\nall: \$(NAME)\n\n\$(NAME): \$(OBJS)\n\t\$(CXX) \$(CXXFLAGS) -o \$@ \$^\n\n%.o: %.cpp\n\t\$(CXX) \$(CXXFLAGS) -c \$< -o \$@\n\nclean:\n\trm -f \$(OBJS)\n\nfclean: clean\n\trm -f \$(NAME)\n\nre: fclean all\n\n.PHONY: all clean fclean re" > Makefile
-pourcentage=25
-afficher_barre_chargement_informations " Progression globale du script" $pourcentage
-echo -e " - $GREEN Fichier Makefile créé avec succès$RESET"
 
-# Créer le fichier main.cpp
-afficher_etape_script "Création du fichier main.cpp" "$YELLOW"
-sleep 0.5
-echo -e "#include \"$projet.hpp\"\n\n \
+# Créer le fichier Makefile seulement s'il n'existe pas
+if [ ! -f Makefile ]; then
+    afficher_etape_script "Création du fichier Makefile" "$BLUE"
+    sleep 0.5
+    echo -e "NAME = $projet\n\nCXX = c++\nCXXFLAGS = -Wall -Wextra -Werror -std=c++98\n\nSRCS = main.cpp $projet.cpp\nOBJS = \$(SRCS:.cpp=.o)\n\nall: \$(NAME)\n\n\$(NAME): \$(OBJS)\n\t\$(CXX) \$(CXXFLAGS) -o \$@ \$^\n\n%.o: %.cpp\n\t\$(CXX) \$(CXXFLAGS) -c \$< -o \$@\n\nclean:\n\trm -f \$(OBJS)\n\nfclean: clean\n\trm -f \$(NAME)\n\nre: fclean all\n\n.PHONY: all clean fclean re" > Makefile
+    pourcentage=25
+    afficher_barre_chargement_informations " Progression globale du script" $pourcentage
+    echo -e " - $GREEN Fichier Makefile créé avec succès$RESET"
+else
+    afficher_etape_script "Le fichier Makefile existe déjà, pas besoin de le créer." "$BLUE"
+    pourcentage=25
+    afficher_barre_chargement_informations " Progression globale du script" $pourcentage
+    echo -e " - $GREEN Utilisation du fichier Makefile existant.$RESET"
+fi
+
+# Créer le fichier main.cpp seulement s'il n'existe pas
+if [ ! -f main.cpp ]; then
+    afficher_etape_script "Création du fichier main.cpp" "$YELLOW"
+    sleep 0.5
+    echo -e "#include \"$projet.hpp\"\n\n \
 int main()\
 \n{\n\
 \t$projet my$projet;\n\
 \t$projet your$projet = my$projet;\n\
 \treturn 0;\n}" \
-> main.cpp
+    > main.cpp
+    pourcentage=50
+    afficher_barre_chargement_informations " Progression globale du script" $pourcentage
+    echo -e " - $GREEN Fichier main.cpp créé avec succès$RESET"
+else
+    afficher_etape_script "Le fichier main.cpp existe déjà, pas besoin de le créer." "$YELLOW"
+    pourcentage=50
+    afficher_barre_chargement_informations " Progression globale du script" $pourcentage
+    echo -e " - $GREEN Utilisation du fichier main.cpp existant.$RESET"
+fi
+
 pourcentage=50
 afficher_barre_chargement_informations " Progression globale du script" $pourcentage
 echo -e " - $GREEN Fichier main.cpp créé avec succès$RESET"
